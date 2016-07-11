@@ -13,7 +13,10 @@ const counter = (state = 0, action) => {
     }
 }
 
-
+const addCounter = (list) => {
+    list.push(0)
+    return list
+}
 
 const store = createStore(counter) // points to the counter fn on line 3
 
