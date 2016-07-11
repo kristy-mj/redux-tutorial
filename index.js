@@ -1,35 +1,40 @@
-import { createStore } from 'redux'
 import React from 'react'
-import { render } from 'react-dom'
+import { render as renderDom } from 'react-dom'
+import { createStore } from 'redux'
+
+const INCREMENT = 'INCREMENT'
+
+const DECREMENT = 'DECREMENT'
+
+const Counter = (props) => {
+    return (
+        <div>
+            <h3>Hello, look how I can count: {props.count} </h3>
+            <button onClick={()=> props.dispatch({type: INCREMENT})}>Up</button>
+            <button onClick={()=> props.dispatch({type: DECREMENT})}>Down</button>
+        </div>
+    )
+}
 
 const counter = (state = 0, action) => {
     switch (action.type) {
-        case 'INCREMENT':
+        case INCREMENT:
             return state + 1;
-        case 'DECREMENT':
+        case DECREMENT:
             return state - 1;
         default:
             return state
     }
 }
 
+const store = createStore(counter)
 
-
-const store = createStore(counter) // points to the counter fn on line 3
-
-
-const show = () => {
-    render(<Counter value={store.getState()}/>, document.getElementById('root'))
+const redraw = () => {
+    renderDom(
+        <Counter count={store.getState()} dispatch={store.dispatch} />,
+        document.getElementById('root')
+    )
 }
 
-store.subscribe(show)
-
-document.addEventListener('click', () => {
-    store.dispatch({ type: 'INCREMENT' })
-})
-
-// console.log(store.getState()) //grabbed the initial state = 0 declared in parameter
-
-// store.dispatch({ type: 'INCREMENT'})
-
-// console.log(store.getState()) // increment by 1
+store.subscribe(redraw)
+redraw()
